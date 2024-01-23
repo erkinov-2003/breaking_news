@@ -15,7 +15,4 @@ class HiveService {
     }
   }
 
-  static void registerAdapter() {
-    Hive.registerAdapter(FavoriteModelAdapter());
-  }
 }

@@ -25,7 +25,7 @@ class CustomProfileItem extends StatelessWidget {
       ),
       leading: Image(
         image: AssetImage(images),
-        height: 28,
+        height: 24,
         color: const Color(0xFF22223b),
       ),
       title: Text(

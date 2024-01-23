@@ -16,11 +16,12 @@ class CustomPageBuilderItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: onPressed,
       child: SizedBox(
-        height: 45,
-        width: 45,
+        height: size.height * 0.050,
+        width: size.width * 0.114,
         child: DecoratedBox(
           decoration: BoxDecoration(
             border: Border.all(

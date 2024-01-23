@@ -8,4 +8,6 @@ class AppIcons {
   static const logOutIcon = "assets/icons/log_out.png";
   static const userIcon =  "assets/icons/user.png";
   static const noFavorite = "assets/icons/no_favorite.png";
+  static const sunIcon = "assets/icons/Sun.png";
+  static const splashIcon = "assets/icons/splash.png";
 }

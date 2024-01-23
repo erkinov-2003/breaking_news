@@ -52,7 +52,6 @@ class FavoriteItem extends StatelessWidget {
                   Text(
                     title,
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          color: AppColors.blackColor,
                           fontWeight: FontWeight.w600,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -86,7 +85,6 @@ class FavoriteItem extends StatelessWidget {
                           child: const Icon(
                             Icons.clear,
                             size: 25,
-                            color: Colors.black,
                           ),
                         )
                       ],

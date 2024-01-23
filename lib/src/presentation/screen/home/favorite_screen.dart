@@ -1,5 +1,4 @@
 import 'package:breaking_news/src/controller/main_controller.dart';
-import 'package:breaking_news/src/core/constants/app_colors.dart';
 import 'package:breaking_news/src/core/constants/app_icons.dart';
 import 'package:breaking_news/src/presentation/screen/home/details_screen.dart';
 import 'package:breaking_news/src/presentation/widget/favorite_item.dart';
@@ -11,6 +10,7 @@ class FavoriteScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     final mainController = Provider.of<MainController>(context);
     return Scaffold(
       body: mainController.getFavoriteList.isNotEmpty
@@ -50,12 +50,11 @@ class FavoriteScreen extends StatelessWidget {
                     image: AssetImage(AppIcons.noFavorite),
                     height: 280,
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: size.height * 0.023),
                   Text(
                     "Your favorites are currently empty",
                     style: Theme.of(context).textTheme.titleLarge!.copyWith(
                           fontWeight: FontWeight.w500,
-                          color: AppColors.blackColor,
                         ),
                   ),
                   Center(
@@ -67,7 +66,6 @@ class FavoriteScreen extends StatelessWidget {
                         style:
                             Theme.of(context).textTheme.titleMedium!.copyWith(
                                   fontWeight: FontWeight.w500,
-                                  color: AppColors.greyColor,
                                 ),
                         textAlign: TextAlign.center,
                       ),

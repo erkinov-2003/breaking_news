@@ -33,6 +33,7 @@ class _PageBuilderState extends State<PageBuilder> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     final mainController = Provider.of<MainController>(context);
     return Scaffold(
       bottomNavigationBar: ClipRRect(
@@ -41,8 +42,8 @@ class _PageBuilderState extends State<PageBuilder> {
           topRight: Radius.circular(25),
         ),
         child: BottomAppBar(
-          height: 65,
-          color: const Color(0xFF22223b),
+          height: size.height * 0.077,
+          shadowColor: Colors.white,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -68,18 +69,18 @@ class _PageBuilderState extends State<PageBuilder> {
                       ),
                     )
                   : Badge(
-                    label: Text("${mainController.getFavoriteList.length}"),
-                    child: CustomPageBuilderItem(
-                      image: AppIcons.heartIcon,
-                      index: index,
-                      pageIndex: 1,
-                      onPressed: () => mainController.navigationPageBuilder(
-                        1,
-                        index = 1,
-                        pageController,
+                      label: Text("${mainController.getFavoriteList.length}"),
+                      child: CustomPageBuilderItem(
+                        image: AppIcons.heartIcon,
+                        index: index,
+                        pageIndex: 1,
+                        onPressed: () => mainController.navigationPageBuilder(
+                          1,
+                          index = 1,
+                          pageController,
+                        ),
                       ),
                     ),
-                  ),
               CustomPageBuilderItem(
                 image: AppIcons.profileIcon,
                 pageIndex: 2,

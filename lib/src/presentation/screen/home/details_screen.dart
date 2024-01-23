@@ -1,5 +1,6 @@
 import 'package:breaking_news/src/controller/main_controller.dart';
 import 'package:breaking_news/src/core/constants/app_colors.dart';
+import 'package:breaking_news/src/core/dialog/favorite_dialog.dart';
 import 'package:breaking_news/src/data/model/favorite_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -28,20 +29,25 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     final mainController = Provider.of<MainController>(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.blackColor,
-        onPressed: () {
-          final model = FavoriteModel(
-            title: widget.title,
-            description: widget.description,
-            image: widget.image!,
-          );
-          mainController.addFavoriteList(model);
-        },
-        child: const Icon(Icons.favorite),
+        onPressed: () => addFavoriteDialog(
+          context,
+          () {
+            final model = FavoriteModel(
+              title: widget.title,
+              description: widget.description,
+              image: widget.image!,
+            );
+            mainController.addFavoriteList(model);
+            Navigator.pop(context);
+          },
+        ),
+        child: const Icon(Icons.favorite, color: AppColors.redColor),
       ),
       backgroundColor: AppColors.whiteColor,
       body: SafeArea(
@@ -50,7 +56,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
             Align(
               alignment: Alignment.topCenter,
               child: SizedBox(
-                height: 360,
+                height: size.height * 0.427,
                 width: double.infinity,
                 child: CachedNetworkImage(
                   imageUrl: widget.image!,
@@ -61,13 +67,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
             Align(
               alignment: Alignment.bottomCenter,
               child: SizedBox(
-                height: 485,
+                height: size.height * 0.576,
                 width: double.infinity,
-                child: DecoratedBox(
+                child: const DecoratedBox(
                   decoration: BoxDecoration(
-                    color: AppColors.whiteColor,
-                    border: Border.all(color: AppColors.blackColor, width: 0.4),
-                    borderRadius: const BorderRadius.only(
+                    color: AppColors.backgroundColor,
+                    borderRadius: BorderRadius.only(
                       topRight: Radius.circular(35),
                       topLeft: Radius.circular(35),
                     ),
@@ -82,7 +87,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 child: Text(
                   widget.title,
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                        color: AppColors.blackColor,
+                        color: AppColors.whiteColor,
                         fontWeight: FontWeight.w600,
                       ),
                 ),
@@ -101,19 +106,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 ),
               ),
             ),
-            Align(
-              alignment: const Alignment(0, 0.5),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 15, right: 15),
-                child: Text(
-                  "",
-                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                        color: Colors.green,
-                        fontWeight: FontWeight.w500,
-                      ),
-                ),
-              ),
-            )
           ],
         ),
       ),

@@ -8,45 +8,42 @@ class CustomHomeItem extends StatelessWidget {
     required this.images,
     required this.title,
     required this.description,
-    required this.authorTitle,
   });
   final String images;
   final String title;
   final String description;
-  final String authorTitle;
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         SizedBox(
-          height: 250,
+          height: size.height * 0.296,
           width: double.infinity,
-          child: images == null
-              ? const SizedBox()
-              : CachedNetworkImage(
-                  imageUrl: images,
-                ),
-        ),
-        const SizedBox(height: 13),
-        Text(
-          authorTitle,
-          style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                color: AppColors.blackColor,
-                fontWeight: FontWeight.w500,
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: AppColors.whiteColor,
+                width: 0.2,
               ),
+            ),
+            child: CachedNetworkImage(
+              imageUrl: images,
+              fit: BoxFit.cover,
+            ),
+          ),
         ),
-        const SizedBox(height: 10),
+        SizedBox(height: size.height * 0.015),
         Text(
           title,
           style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                color: AppColors.blackColor,
                 fontWeight: FontWeight.w600,
               ),
         ),
-        const SizedBox(height: 20),
+        SizedBox(height: size.height * 0.023),
         Text(
           description,
           style: Theme.of(context).textTheme.titleMedium!.copyWith(
