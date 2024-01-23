@@ -1,3 +1,4 @@
+import 'package:breaking_news/src/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class CustomPageBuilderItem extends StatelessWidget {
@@ -18,16 +19,21 @@ class CustomPageBuilderItem extends StatelessWidget {
     return GestureDetector(
       onTap: onPressed,
       child: SizedBox(
-        height: 50,
-        width: 50,
+        height: 45,
+        width: 45,
         child: DecoratedBox(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: AppColors.whiteColor,
+              width: 0.1,
+            ),
+            color: AppColors.blackColor,
             shape: BoxShape.circle,
           ),
           child: Center(
             child: Image(
               image: AssetImage(image),
-              height: 32,
+              height: 28,
               color: index == pageIndex ? Colors.red : Colors.white,
             ),
           ),

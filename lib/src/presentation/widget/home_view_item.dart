@@ -8,10 +8,12 @@ class CustomHomeItem extends StatelessWidget {
     required this.images,
     required this.title,
     required this.description,
+    required this.authorTitle,
   });
   final String images;
   final String title;
   final String description;
+  final String authorTitle;
 
   @override
   Widget build(BuildContext context) {
@@ -29,14 +31,12 @@ class CustomHomeItem extends StatelessWidget {
                 ),
         ),
         const SizedBox(height: 13),
-        Center(
-          child: Text(
-            "Author",
-            style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                  color: AppColors.blackColor,
-                  fontWeight: FontWeight.w500,
-                ),
-          ),
+        Text(
+          authorTitle,
+          style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                color: AppColors.blackColor,
+                fontWeight: FontWeight.w500,
+              ),
         ),
         const SizedBox(height: 10),
         Text(
@@ -53,7 +53,6 @@ class CustomHomeItem extends StatelessWidget {
                 color: Colors.green,
                 fontWeight: FontWeight.w600,
               ),
-          maxLines: 4,
         ),
       ],
     );

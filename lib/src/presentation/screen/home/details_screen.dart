@@ -1,6 +1,9 @@
+import 'package:breaking_news/src/controller/main_controller.dart';
 import 'package:breaking_news/src/core/constants/app_colors.dart';
+import 'package:breaking_news/src/data/model/favorite_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class DetailsScreen extends StatefulWidget {
   const DetailsScreen({
@@ -25,83 +28,92 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final mainController = Provider.of<MainController>(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.blackColor,
-        onPressed: () => {},
+        onPressed: () {
+          final model = FavoriteModel(
+            title: widget.title,
+            description: widget.description,
+            image: widget.image!,
+          );
+          mainController.addFavoriteList(model);
+        },
         child: const Icon(Icons.favorite),
       ),
       backgroundColor: AppColors.whiteColor,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: AppColors.whiteColor,
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(
-            Icons.arrow_back_ios_new_rounded,
-            size: 20,
-            color: AppColors.blackColor,
-          ),
-        )
-      ),
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
+      body: SafeArea(
+        child: Stack(
           children: [
-            Card(
+            Align(
+              alignment: Alignment.topCenter,
               child: SizedBox(
-                height: 500,
+                height: 360,
                 width: double.infinity,
                 child: CachedNetworkImage(
                   imageUrl: widget.image!,
-                  fit: BoxFit.cover,
+                  fit: BoxFit.fitHeight,
                 ),
               ),
             ),
-            const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.only(left: 15),
-              child: Text(
-                widget.title,
-                style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                      color: AppColors.blackColor,
-                      fontWeight: FontWeight.w500,
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: SizedBox(
+                height: 485,
+                width: double.infinity,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: AppColors.whiteColor,
+                    border: Border.all(color: AppColors.blackColor, width: 0.4),
+                    borderRadius: const BorderRadius.only(
+                      topRight: Radius.circular(35),
+                      topLeft: Radius.circular(35),
                     ),
-              ),
-            ),
-            const SizedBox(height: 25),
-            Padding(
-              padding: const EdgeInsets.only(left: 15),
-              child: Row(
-                children: [
-                  const CircleAvatar(
-                    radius: 25,
-                    backgroundColor: Colors.green,
                   ),
-                  Text(
-                    "Andrey Carlos",
-                    style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                          color: AppColors.greyColor,
-                          fontWeight: FontWeight.w500,
-                        ),
-                  ),
-                ],
+                ),
               ),
             ),
-            const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.only(left: 15),
-              child: Text(
-                widget.description,
-                style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                      color: AppColors.blackColor,
-                      fontWeight: FontWeight.w500,
-                    ),
+            Align(
+              alignment: const Alignment(0, 0),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 15, right: 15),
+                child: Text(
+                  widget.title,
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        color: AppColors.blackColor,
+                        fontWeight: FontWeight.w600,
+                      ),
+                ),
               ),
             ),
+            Align(
+              alignment: const Alignment(0, 0.3),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 15, right: 15),
+                child: Text(
+                  widget.description,
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        color: Colors.green,
+                        fontWeight: FontWeight.w500,
+                      ),
+                ),
+              ),
+            ),
+            Align(
+              alignment: const Alignment(0, 0.5),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 15, right: 15),
+                child: Text(
+                  "",
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        color: Colors.green,
+                        fontWeight: FontWeight.w500,
+                      ),
+                ),
+              ),
+            )
           ],
         ),
       ),

@@ -28,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return service;
   }
 
+
   @override
   Widget build(BuildContext context) {
     final mainController = Provider.of<MainController>(context);
@@ -87,6 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       images: image,
                                       title: article["title"],
                                       description: article["description"],
+                                      authorTitle: article["author"] ?? "",
                                     ),
                                   ),
                                 )
@@ -102,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                     }
                     return const Center(
-                      child: Text("Error future builder now data"),
+                      child: Text("Error now data failed 😟"),
                     );
                   },
                 ),

@@ -56,16 +56,30 @@ class _PageBuilderState extends State<PageBuilder> {
                   pageController,
                 ),
               ),
-              CustomPageBuilderItem(
-                image: AppIcons.heartIcon,
-                index: index,
-                pageIndex: 1,
-                onPressed: () => mainController.navigationPageBuilder(
-                  1,
-                  index = 1,
-                  pageController,
-                ),
-              ),
+              mainController.getFavoriteList.isEmpty
+                  ? CustomPageBuilderItem(
+                      image: AppIcons.heartIcon,
+                      index: index,
+                      pageIndex: 1,
+                      onPressed: () => mainController.navigationPageBuilder(
+                        1,
+                        index = 1,
+                        pageController,
+                      ),
+                    )
+                  : Badge(
+                    label: Text("${mainController.getFavoriteList.length}"),
+                    child: CustomPageBuilderItem(
+                      image: AppIcons.heartIcon,
+                      index: index,
+                      pageIndex: 1,
+                      onPressed: () => mainController.navigationPageBuilder(
+                        1,
+                        index = 1,
+                        pageController,
+                      ),
+                    ),
+                  ),
               CustomPageBuilderItem(
                 image: AppIcons.profileIcon,
                 pageIndex: 2,
@@ -82,6 +96,7 @@ class _PageBuilderState extends State<PageBuilder> {
       ),
       body: PageView(
         controller: pageController,
+        physics: const NeverScrollableScrollPhysics(),
         children: const [
           HomeScreen(),
           FavoriteScreen(),

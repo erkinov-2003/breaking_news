@@ -1,5 +1,4 @@
 import 'package:breaking_news/src/controller/main_controller.dart';
-import 'package:breaking_news/src/presentation/screen/home/home_screen.dart';
 import 'package:breaking_news/src/presentation/screen/page_builder/page_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
