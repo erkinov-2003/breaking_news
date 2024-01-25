@@ -1,13 +1,14 @@
-import 'package:breaking_news/src/controller/main_controller.dart';
-import 'package:breaking_news/src/core/constants/app_colors.dart';
-import 'package:breaking_news/src/core/constants/app_icons.dart';
-import 'package:breaking_news/src/presentation/screen/home/details_screen.dart';
-import 'package:breaking_news/src/presentation/widget/home_view_item.dart';
-import 'package:breaking_news/src/service/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
+import '../../../controller/main_controller.dart';
+import '../../../core/constants/app_colors.dart';
+import '../../../core/constants/app_icons.dart';
+import '../../../service/api_service.dart';
+import '../../widget/home_view_item.dart';
+import 'details_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -28,6 +29,12 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<List<dynamic>> fetchFutureFunction() async {
     final service = await ApiService.fetchNewsData();
     return service;
+  }
+
+  Future<void> _refresh() async {
+    setState(() {
+      _futureList = fetchFutureFunction();
+    });
   }
 
   @override
@@ -53,56 +60,66 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(left: 15, right: 15, top: 10),
-          child: FutureBuilder(
-            future: _futureList,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: ListView.builder(
-                        physics: const BouncingScrollPhysics(),
-                        itemCount: snapshot.data!.length,
-                        itemBuilder: (context, index) {
-                          final article = snapshot.data![index];
-                          final image = article["urlToImage"];
-                          return image != null
-                              ? Padding(
-                                  padding: const EdgeInsets.only(top: 20),
-                                  child: GestureDetector(
-                                    onTap: () => mainController.navigatorScreen(
-                                      context,
-                                      DetailsScreen(
+          child: RefreshIndicator(
+            backgroundColor: Colors.green,
+            onRefresh: _refresh,
+            child: FutureBuilder(
+              future: _futureList,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: ListView.builder(
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index) {
+                            final article = snapshot.data![index];
+                            final image = article["urlToImage"];
+                            return image != null
+                                ? Padding(
+                                    padding: const EdgeInsets.only(top: 20),
+                                    child: GestureDetector(
+                                      onTap: () =>
+                                          mainController.navigatorScreen(
+                                        context,
+                                        DetailsScreen(
+                                          title: article["title"],
+                                          description: article["description"],
+                                          image: image,
+                                        ),
+                                      ),
+                                      child: CustomHomeItem(
+                                        images: image,
                                         title: article["title"],
                                         description: article["description"],
-                                        image: image,
                                       ),
                                     ),
-                                    child: CustomHomeItem(
-                                      images: image,
-                                      title: article["title"],
-                                      description: article["description"],
-                                    ),
-                                  ),
-                                )
-                              : const SizedBox();
-                        },
+                                  )
+                                : const SizedBox();
+                          },
+                        ),
                       ),
+                    ],
+                  );
+                }
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: SpinKitFadingCircle(
+                      color: AppColors.greenColor,
                     ),
-                  ],
+                  );
+                }
+                return Center(
+                  child: Lottie.asset(
+                    "assets/lottie/Animation - 1706212950166.json",
+                    height: 190,
+                  ),
                 );
-              }
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const SpinKitFadingCircle(
-                  color: AppColors.greenColor,
-                );
-              }
-              return const Center(
-                child: Text("Error now data failed 😟"),
-              );
-            },
+              },
+            ),
           ),
         ),
       ),
