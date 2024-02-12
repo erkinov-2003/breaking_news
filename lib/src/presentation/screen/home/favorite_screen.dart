@@ -1,7 +1,6 @@
 import 'package:breaking_news/src/controller/main_controller.dart';
 import 'package:breaking_news/src/core/constants/app_icons.dart';
-import 'package:breaking_news/src/presentation/screen/home/details_screen.dart';
-import 'package:breaking_news/src/presentation/widget/favorite_item.dart';
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            import 'package:breaking_news/src/presentation/widget/favorite_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,16 +17,8 @@ class FavoriteScreen extends StatelessWidget {
               physics: const BouncingScrollPhysics(),
               itemCount: mainController.getFavoriteList.length,
               itemBuilder: (context, index) {
-                final favoriteList = mainController.getFavoriteList;
                 return GestureDetector(
-                  onTap: () => mainController.navigatorScreen(
-                    context,
-                    DetailsScreen(
-                      title: favoriteList[index].title,
-                      description: favoriteList[index].description,
-                      image: favoriteList[index].image,
-                    ),
-                  ),
+                  onTap: () => {},
                   child: Padding(
                     padding: const EdgeInsets.only(top: 10),
                     child: FavoriteItem(

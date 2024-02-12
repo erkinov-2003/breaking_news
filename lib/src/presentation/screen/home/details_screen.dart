@@ -2,30 +2,14 @@ import 'package:breaking_news/src/controller/main_controller.dart';
 import 'package:breaking_news/src/core/constants/app_colors.dart';
 import 'package:breaking_news/src/core/dialog/favorite_dialog.dart';
 import 'package:breaking_news/src/data/model/favorite_model.dart';
+import 'package:breaking_news/src/data/model/news_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class DetailsScreen extends StatefulWidget {
-  const DetailsScreen({
-    super.key,
-    required this.title,
-    required this.description,
-    required this.image,
-  });
-  final String title;
-  final String description;
-  final String? image;
-
-  @override
-  State<DetailsScreen> createState() => _DetailsScreenState();
-}
-
-class _DetailsScreenState extends State<DetailsScreen> {
-  @override
-  void initState() {
-    super.initState();
-  }
+class DetailsScreen extends StatelessWidget {
+  const DetailsScreen({super.key, required this.articlesData});
+  final ArticlesData articlesData;
 
   @override
   Widget build(BuildContext context) {
@@ -39,9 +23,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
           context,
           () {
             final model = FavoriteModel(
-              title: widget.title,
-              description: widget.description,
-              image: widget.image!,
+              title: articlesData.title!,
+              description: articlesData.description!,
+              image: articlesData.urlToImage!,
             );
             mainController.addFavoriteList(model);
             Navigator.pop(context);
@@ -59,7 +43,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 height: size.height * 0.427,
                 width: double.infinity,
                 child: CachedNetworkImage(
-                  imageUrl: widget.image!,
+                  imageUrl: articlesData.urlToImage!,
                   fit: BoxFit.fitHeight,
                 ),
               ),
@@ -67,12 +51,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
             Align(
               alignment: Alignment.bottomCenter,
               child: SizedBox(
-                height: size.height * 0.576,
+                height: size.height * 0.560,
                 width: double.infinity,
                 child: const DecoratedBox(
                   decoration: BoxDecoration(
                     color: AppColors.backgroundColor,
-                    borderRadius: BorderRadius.only(
+                    borderRadius:  BorderRadius.only(
                       topRight: Radius.circular(35),
                       topLeft: Radius.circular(35),
                     ),
@@ -85,7 +69,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
               child: Padding(
                 padding: const EdgeInsets.only(left: 15, right: 15),
                 child: Text(
-                  widget.title,
+                  articlesData.title!,
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(
                         color: AppColors.whiteColor,
                         fontWeight: FontWeight.w600,
@@ -98,7 +82,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
               child: Padding(
                 padding: const EdgeInsets.only(left: 15, right: 15),
                 child: Text(
-                  widget.description,
+                  articlesData.description!,
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(
                         color: Colors.green,
                         fontWeight: FontWeight.w500,

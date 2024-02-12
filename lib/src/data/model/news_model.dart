@@ -1,17 +1,17 @@
-class NewsModel {
+class NewsApiModel {
   String? status;
   int? totalResults;
-  List<Articles>? articles;
+  List<ArticlesData>? articles;
 
-  NewsModel({this.status, this.totalResults, this.articles});
+  NewsApiModel({this.status, this.totalResults, this.articles});
 
-  NewsModel.fromJson(Map<String, dynamic> json) {
+  NewsApiModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     totalResults = json['totalResults'];
     if (json['articles'] != null) {
-      articles = <Articles>[];
+      articles = <ArticlesData>[];
       json['articles'].forEach((v) {
-        articles!.add(Articles.fromJson(v));
+        articles!.add(ArticlesData.fromJson(v));
       });
     }
   }
@@ -27,7 +27,7 @@ class NewsModel {
   }
 }
 
-class Articles {
+class ArticlesData {
   Source? source;
   String? author;
   String? title;
@@ -37,7 +37,7 @@ class Articles {
   String? publishedAt;
   String? content;
 
-  Articles({
+  ArticlesData({
     this.source,
     this.author,
     this.title,
@@ -48,7 +48,7 @@ class Articles {
     this.content,
   });
 
-  Articles.fromJson(Map<String, dynamic> json) {
+  ArticlesData.fromJson(Map<String, dynamic> json) {
     source = json['source'] != null ? Source.fromJson(json['source']) : null;
     author = json['author'];
     title = json['title'];

@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
 
-import '../data/model/favorite_model.dart';
+import '../../data/model/favorite_model.dart';
 
 class HiveService {
   static Box? box;

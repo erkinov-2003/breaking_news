@@ -1,12 +1,11 @@
+import 'package:breaking_news/src/data/model/news_model.dart';
+import 'package:breaking_news/src/service/cleint_service/http_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 import '../../../controller/main_controller.dart';
-import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_icons.dart';
-import '../../../service/api_service.dart';
+import '../../../service/user_api_service/news_api_service.dart';
 import '../../widget/home_view_item.dart';
 import 'details_screen.dart';
 
@@ -18,23 +17,20 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late Future<List<dynamic>> _futureList;
+  late NewsApiService newsApiService;
 
   @override
   void initState() {
-    _futureList = fetchFutureFunction();
+    newsApiService = NewsApiService(
+      httpService: context.read<HttpService>(),
+    )..getNewsApi();
     super.initState();
   }
 
-  Future<List<dynamic>> fetchFutureFunction() async {
-    final service = await ApiService.fetchNewsData();
-    return service;
-  }
-
-  Future<void> _refresh() async {
-    setState(() {
-      _futureList = fetchFutureFunction();
-    });
+  @override
+  void dispose() {
+    newsApiService.dispose();
+    super.dispose();
   }
 
   @override
@@ -59,69 +55,65 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.only(left: 15, right: 15, top: 10),
-          child: RefreshIndicator(
-            backgroundColor: Colors.green,
-            onRefresh: _refresh,
-            child: FutureBuilder(
-              future: _futureList,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
+            padding: const EdgeInsets.only(left: 15, right: 15, top: 10),
+            child: ChangeNotifierProvider.value(
+              value: newsApiService,
+              child: Selector<NewsApiService, List<ArticlesData>>(
+                selector: (selector, selectorList) {
+                  return selectorList.articlesList;
+                },
+                builder: (context, value, child) {
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
-                        child: ListView.builder(
-                          physics: const BouncingScrollPhysics(),
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (context, index) {
-                            final article = snapshot.data![index];
-                            final image = article["urlToImage"];
-                            return image != null
-                                ? Padding(
-                                    padding: const EdgeInsets.only(top: 20),
-                                    child: GestureDetector(
-                                      onTap: () =>
-                                          mainController.navigatorScreen(
-                                        context,
-                                        DetailsScreen(
-                                          title: article["title"],
-                                          description: article["description"],
-                                          image: image,
+                        child: value.isEmpty
+                            ? const Center(
+                                child: CircularProgressIndicator(),
+                              )
+                            : RefreshIndicator(
+                                onRefresh: () {
+                                  return context
+                                      .read<NewsApiService>()
+                                      .getNewsApi();
+                                },
+                                child: ListView.builder(
+                                  physics: const BouncingScrollPhysics(),
+                                  itemCount: value.length,
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding: const EdgeInsets.only(top: 20),
+                                      child: GestureDetector(
+                                        onTap: () =>
+                                            mainController.navigatorScreen(
+                                          context,
+                                          DetailsScreen(
+                                            articlesData: value[index],
+                                          ),
                                         ),
+                                        child: value.isNotEmpty
+                                            ? CustomHomeItem(
+                                                images:
+                                                    value[index].urlToImage ??
+                                                        "",
+                                                title: value[index].title ?? "",
+                                                description:
+                                                    value[index].description ??
+                                                        "",
+                                              )
+                                            : const SizedBox(),
                                       ),
-                                      child: CustomHomeItem(
-                                        images: image,
-                                        title: article["title"],
-                                        description: article["description"],
-                                      ),
-                                    ),
-                                  )
-                                : const SizedBox();
-                          },
-                        ),
+                                    );
+                                  },
+                                ),
+                              ),
                       ),
                     ],
                   );
-                }
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: SpinKitFadingCircle(
-                      color: AppColors.greenColor,
-                    ),
-                  );
-                }
-                return Center(
-                  child: Lottie.asset(
-                    "assets/lottie/Animation - 1706212950166.json",
-                    height: 190,
-                  ),
-                );
-              },
-            ),
-          ),
-        ),
+                },
+              ),
+            )),
       ),
     );
   }
